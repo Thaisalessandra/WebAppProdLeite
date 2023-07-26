@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Produção de Leite</title>
+        <h:outputStylesheet library="css" name="geral.css"/>
+    </h:head>
+    <h:body > 
+        <h:panelGrid columns="1" style="background-color: #6495ED; width: 100%; text-align: center;">
+            <h:outputText style="font-size: 36px; color: whitesmoke" value="Gerenciador de Produção"/>
+        </h:panelGrid>
+        <h:panelGrid />
+        <h:form>
+            <h:panelGrid columns="6" 
+                         style="width: 100%; background-color: #d2d2d2; text-align: center;">
+                <p:commandLink  action="GerenciarUsuario" value="Gerenciar usuários" 
+                                styleClass="linkMenu"/>
+                <p:commandLink  action="gerenciarVacas" value="Gerenciar vacas" 
+                                styleClass="linkMenu"/>
+                <p:commandLink  action="producaoGerenciar" value="Gerenciar produção" 
+                                styleClass="linkMenu"/>
+                <p:commandLink  action="producaoDiaria" value="Produção diária" 
+                                styleClass="linkMenu"/>
+                <p:commandLink  action="producaoPorVaca" value="Produção por vaca" 
+                                styleClass="linkMenu"/>
+                <p:commandLink action="index" value="Sair" 
+                               styleClass="linkMenu"/>
+            </h:panelGrid>
+        </h:form>
+        <h:panelGrid />
+
+
+        
+        <p/>
+        <h:form id="formProducao">
+            <h:panelGrid style="width: 30%; margin-left: 35%" >
+                <h:panelGrid style="width:100%; text-align: center" >
+                    <p:outputLabel value="Produção Diária" />
+                </h:panelGrid>
+                <h:panelGrid columns="3">
+                    <p:outputLabel  value="Data:"/>
+                    <p:calendar id="data" pattern="dd/MM/yyyy"
+                                value="#{producaoDiariaControle.dia}" 
+                                required="true" requiredMessage="Data obrigatória"
+                                showOn="button"
+                                locale="pt"/>
+                    <p:commandButton value="buscar" 
+                                     action="#{producaoDiariaControle.buscarProducaoDiaria()}"
+                                     update=":formTabela" />
+                </h:panelGrid>
+                <p:messages showIcon="false" closable="true" />
+            </h:panelGrid>
+        </h:form>
+
+        <h:form id="formTabela" >
+            <p:dataTable id="tabelaProducao"
+                         value="#{producaoDiariaControle.lista}"
+                         var="item"
+                         emptyMessage="Nenhuma produção para esta data"
+                         style=" width: 80%; margin-left: 10%">
+                <p:column headerText="ID">
+                    <h:outputText value="#{item.id}"/>
+                </p:column>
+                <p:column headerText="Vaca">
+                    <h:outputText value="#{item.vaca.nome}"/>
+                </p:column>
+                <p:column headerText="Quantidade">
+                    <h:outputText value="#{item.quantidade}"/>
+                </p:column>                
+            </p:dataTable>
+
+            <p/>
+            <h:panelGrid style=" width: 80%; margin-left: 10%" columns="2">
+                <p:outputLabel value="Total: "/>
+                <p:outputLabel value="#{producaoDiariaControle.total}"/>
+            </h:panelGrid>
+        </h:form>
+        <p/>
+
+
+
+    </h:body>
+</html>

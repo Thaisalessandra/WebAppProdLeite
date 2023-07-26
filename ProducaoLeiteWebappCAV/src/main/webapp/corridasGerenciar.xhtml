@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>Gerenciador de Cavalos</title>        
+    </h:head>
+    <h:body>
+        <h:panelGrid columns="1" style="background-color: #6495ED; width: 100%; text-align: center;">
+            <h:outputText style="font-size: 36px; color: whitesmoke" value="Gerenciador de Produção"/>
+        </h:panelGrid>
+        <h:panelGrid />
+        <h:form>
+            <h:panelGrid columns="6" 
+                         style="width: 100%; background-color: #d2d2d2; text-align: center;">
+                <p:commandLink  action="GerenciarUsuario" value="Gerenciar usuários" 
+                                styleClass="linkMenu"/>
+                <p:commandLink  action="gerenciarCavalos" value="Gerenciar Cavalos" 
+                                styleClass="linkMenu"/>
+                <p:commandLink  action="corridasGerenciar" value="Gerenciar Corridas" 
+                                styleClass="linkMenu"/>
+                <p:commandLink  action="producaoDiaria" value="Produção diária" 
+                                styleClass="linkMenu"/>
+                <p:commandLink  action="producaoPorVaca" value="Tempo por Cavalo" 
+                                styleClass="linkMenu"/>
+                <p:commandLink action="index" value="Sair" 
+                               styleClass="linkMenu"/>
+            </h:panelGrid>
+        </h:form>
+        <h:panelGrid />
+        
+        <h:form id="formPrincipal">
+            <p:commandLink value="voltar ao menu" action="menu"/>
+
+            <p/> 
+            <p:outputLabel value="Vaca: "/>
+
+            <p:selectOneMenu id="selectVaca" 
+                             converter="vacaConverter"
+                             required="true"
+                             requiredMessage="Selecione uma vaca"
+                             value="#{producaoPorVacaControle.vacaSelecionada}" > 
+                <f:selectItem itemValue="#{null}"
+                              itemLabel="Selecione uma vaca"
+                              noSelectionOption="false"/> 
+                <f:selectItems 
+                    value="#{producaoPorVacaControle.listaVacas}"
+                    var="item" 
+                    itemValue="#{item}"
+                    itemLabel="#{item.nome}"/>     
+            </p:selectOneMenu>
+            <p:commandButton value="buscar" 
+                             action="#{producaoPorVacaControle.buscar()}"
+                             update="formPrincipal, :formTabela" />
+            <p:messages showIcon="false" closable="true"/>
+
+        </h:form>
+
+        <h:form id="formTabela">
+            <p:dataTable id="tabelaProducao" 
+                         value="#{producaoPorVacaControle.listaProducao}"
+                         var="prod"
+                         emptyMessage="Nenhuma produção para esta vaca" >
+                <p:column headerText="ID">
+                    <h:outputText value="#{prod.id}"/>
+                </p:column>
+                <p:column headerText="Nome">
+                    <h:outputText value="#{prod.vaca.nome}"/>
+                </p:column>
+                <p:column headerText="Data">
+                    <h:outputText value="#{prod.dataProducao}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Quantidade">
+                    <h:outputText value="#{prod.quantidade}"/>
+                </p:column>
+
+
+            </p:dataTable>
+
+            <p/>
+            <h:panelGrid  columns="2">
+                <p:outputLabel value="Total: "/>
+                <p:outputLabel value="#{producaoPorVacaControle.total}"/>
+            </h:panelGrid>
+            
+
+        </h:form>
+
+    </h:body>   
+</html>  
